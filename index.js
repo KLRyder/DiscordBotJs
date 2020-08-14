@@ -367,4 +367,4 @@ function playYoutube(conn, url) {
     conn.dispatcher.setVolume(volume);
 }
 
-client.login('NjkzNDA1MzczNjg3OTIyODAz.Xn85KA.HVLEpYgMP7l6-K3FqfvqsgyKtVQ');
+client.login(CONFIG.DiscordBotToken);
