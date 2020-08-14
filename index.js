@@ -30,9 +30,7 @@ mysqlConnection.connect(function (err) {
 function findCommand(msg) {
     let commands;
     let array;
-    commands = RegExp('\.harvest|\.punishment|\.yt|\.volume|\.disconnect|\.dc|\.quote|\.addQuote|\.removeQuote|' +
-        '\.' +
-        '|\.roll|\.poll|\.karma|\.report|\.furyhorn|\.addCom|\.blur', 'mi');
+    commands = RegExp('\.harvest|\.punishment|\.yt|\.volume|\.disconnect|\.dc|\.quote|\.addQuote|\.removeQuote|\.roll|\.poll|\.karma|\.report|\.furyhorn|\.addCom|\.blur', 'mi');
     array = commands.exec(msg);
     if (array != null) {
         return array[0];
@@ -257,15 +255,17 @@ client.on('message', msg => {
             break;
 
         case '.blur':
+            msg.reply("blur triggered");
             const fs = require('fs');
             try {
                 msg.attachments.forEach(a => {
-                    fs.writeFileSync(`./${a.name}`, a.file); // Write the file to the system synchronously.
+                    fs.writeFileSync(`./workingImages/test`, a.file); // Write the file to the system synchronously.
                     console.log(a.name);
                 });
             } catch (e){
                 msg.reply("Something went really wrong here.");
             }
+            break;
 
         // Roll some dice.
         // Usage ".roll (X)d(Y)" or ".roll (X)d(Y)+(Z)".
