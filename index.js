@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const mysql = require('mysql');
-const Ytdl = require('ytdl-core');
+const Ytdl = require('ytdl-core-discord');
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const CONFIG = require('./config.json');
 const client = new Discord.Client();
@@ -32,7 +32,7 @@ function findCommand(msg) {
     let array;
     commands = RegExp('\.harvest|\.punishment|\.yt|\.volume|\.disconnect|\.dc|\.quote|\.addQuote|\.removeQuote|' +
         '\.' +
-        '|\.roll|\.poll|\.karma|\.report|\.furyhorn|\.addCom', 'mi');
+        '|\.roll|\.poll|\.karma|\.report|\.furyhorn|\.addCom|\.blur', 'mi');
     array = commands.exec(msg);
     if (array != null) {
         return array[0];
@@ -131,7 +131,7 @@ redditHttp.onreadystatechange = () => {
 
 pollHttp.onreadystatechange = () => {
     if (pollHttp.readyState === 4) {
-        pollRequestHolder.shift().reply("https://strawpoll.com/"+pollHttp.responseText.substr(15,8));
+        pollRequestHolder.shift().reply("https://strawpoll.com/" + pollHttp.responseText.substr(15, 8));
     }
 };
 
@@ -256,6 +256,17 @@ client.on('message', msg => {
             process.stdout.on('data', data => console.log(data));
             break;
 
+        case '.blur':
+            const fs = require('fs');
+            try {
+                msg.attachments.forEach(a => {
+                    fs.writeFileSync(`./${a.name}`, a.file); // Write the file to the system synchronously.
+                    console.log(a.name);
+                });
+            } catch (e){
+                msg.reply("Something went really wrong here.");
+            }
+
         // Roll some dice.
         // Usage ".roll (X)d(Y)" or ".roll (X)d(Y)+(Z)".
         // Rolls X dice with Y sides (optionally adds Z to the combined totals.)
@@ -346,24 +357,24 @@ client.on('message', msg => {
         case '.poll':
             let pollJSON;
             let pollOptions = msg.content.substr(6).split("~");
-            if (pollOptions.length<3){
+            if (pollOptions.length < 3) {
                 msg.reply("please use the following format to create a poll \n.poll Question title ~ option 1 ~ option 2 ~ options 3+ are optional");
             }
-            pollJSON=require("./pollTemplate.json");
+            pollJSON = require("./pollTemplate.json");
             pollJSON.poll.title = pollOptions.shift();
             pollJSON.poll.answers = pollOptions;
-            pollHttp.open("POST","https://strawpoll.com/api/poll");
+            pollHttp.open("POST", "https://strawpoll.com/api/poll");
             pollHttp.send(JSON.stringify(pollJSON));
             pollRequestHolder.push(msg);
-        break;
+            break;
         case 'none':
         case 'default':
             break;
     }
 });
 
-function playYoutube(conn, url) {
-    conn.play(Ytdl(url));
+async function playYoutube(conn, url) {
+    conn.play(await Ytdl(url), {type: 'opus'});
     conn.dispatcher.setVolume(volume);
 }
 
