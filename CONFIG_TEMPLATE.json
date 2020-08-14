@@ -1,0 +1,12 @@
+{
+  "SQLHost": "localhost",
+  "SQLUsername": "PLACEHOLDER_FAKE_USERNAME",
+  "SQLPassword": "PLACEHOLDER_FAKE_PASSWORD",
+  "SQLDatabase": "defaultdb",
+  "SQLCharset": "utf8mb4",
+  "PunishmetSong":"https://www.youtube.com/watch?v=wv-7hILtUI4",
+  "PunishmentChannel":"123456789012345678",
+  "OneWordChannel":123456789012345678,
+  "OneWordWord": "PLACEHOLDER",
+  "DefaultRedditAccount": "PLACEHOLDER_FAKE_USERNAME"
+}
