@@ -9,6 +9,7 @@
     "ffmpeg-static": "^4.0.1",
     "mysql": "^2.18.1",
     "opusscript": "0.0.7",
+    "request": "^2.88.2",
     "xmlhttprequest": "^1.8.0",
     "ytdl": "^1.2.0",
     "ytdl-core": "latest",

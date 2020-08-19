@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const mysql = require('mysql');
 const Ytdl = require('ytdl-core-discord');
+const fs = require('fs');
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const CONFIG = require('./config.json');
 const client = new Discord.Client();
@@ -252,18 +253,38 @@ client.on('message', msg => {
             let spawn = require("child_process").spawn;
             let process = spawn('python', ["./test.py", "do it work?", "it do"]);
             process.stdout.on('data', data => console.log(data));
+            process.stderr.on('data', data => msg.reply(data.toString()));
             break;
 
         case '.blur':
-            msg.reply("blur triggered");
-            const fs = require('fs');
             try {
                 msg.attachments.forEach(a => {
-                    fs.writeFileSync(`./workingImages/test`, a.file); // Write the file to the system synchronously.
-                    console.log(a.name);
+                    var request = require('request');
+                    request.head(a.proxyURL, (err, res, body) => {
+                        request(a.proxyURL)
+                            .pipe(fs.createWriteStream(`./workingImages/` + a.name))
+                            .on('close', () => {
+                                let spawn = require("child_process");
+                                let process = spawn.spawn("./workingImages/RadialBlurCommandline.exe", ["./workingImages/" + a.name]);
+                                console.log(a.name);
+                                process.stderr.on('data', (data) => {
+                                    msg.reply(data.toString());
+                                });
+                                process.on('close', (exitCode) => {
+                                    msg.channel.send({
+                                        files: [
+                                            "./workingImages/" + a.name
+                                        ]
+                                    });
+                                    msg.delete();
+                                })
+                            })
+                    });
+
+
                 });
-            } catch (e){
-                msg.reply("Something went really wrong here.");
+            } catch (e) {
+                msg.reply(e.toString());
             }
             break;
 
