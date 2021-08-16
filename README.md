@@ -1,4 +1,7 @@
 "# DiscordBotJs" 
+
+This repo is here for posterity reasons. The code contained within is very poorly structured, and an entier re-creation of this project is underway.
+
 A quick and dirty discord chatbot built to handle some of my discord servers joke requests. Lots of hardcodeing, but a nice way of getting back into JS.
 
 NB:
